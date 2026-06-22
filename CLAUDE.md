@@ -17,15 +17,37 @@ go/
 └── projects/          # 完整项目（博客 API、短链接等）
 ```
 
+## Day 目录约定
+
+每个 day 目录按下面结构组织，避免同一个 package 下出现多个 `func main()`：
+
+```
+dayXX/
+├── demo/main.go       # 当天示例代码
+├── exercise/main.go   # 当天练习代码
+└── notes.md           # 当天笔记和复盘
+```
+
+运行方式：
+
+```bash
+go run phase1-basics/dayXX/demo/main.go
+go run phase1-basics/dayXX/exercise/main.go
+go test ./...
+```
+
 ## 约定
 
-- 每次学习在对应阶段目录下创建 `dayXX/` 子目录
-- 每个 day 目录包含当天的练习代码和 `notes.md` 笔记
-- 学习完成后更新 PROGRESS.md 记录进度
-- 代码文件用英文命名，注释可以用中文
+- 每次学习在对应阶段目录下创建 `dayXX/` 子目录。
+- 每个 day 目录必须包含 `demo/`、`exercise/` 和 `notes.md`。
+- 学习完成后更新 `PROGRESS.md` 记录进度。
+- 代码文件用英文命名，注释可以用中文。
+- 示例和练习都要保持 `gofmt` 格式化。
 
 ## 工作流
 
-1. 开始学习 → 在 PROGRESS.md 中标记当天开始
-2. 写代码练习 → 存放在对应 day 目录
-3. 学习结束 → 更新 PROGRESS.md 状态为已完成，记录收获和疑问
+1. 开始学习 → 在 `PROGRESS.md` 中标记当天开始。
+2. 看示例 → 运行 `dayXX/demo/main.go`。
+3. 写练习 → 完成 `dayXX/exercise/main.go`。
+4. 记录复盘 → 更新 `dayXX/notes.md`。
+5. 学习结束 → 更新 `PROGRESS.md` 状态为已完成，记录收获和疑问。

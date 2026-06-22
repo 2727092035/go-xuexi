@@ -1,0 +1,21 @@
+---
+description: Go 练习文件：只提示语法，不补全解题逻辑
+globs: phase1-basics/**/exercise/**
+alwaysApply: false
+---
+
+# 练习模式
+
+用户正在 `exercise/` 目录独立练习，请勿帮写解题逻辑。
+
+## 允许
+
+- Go 语法：`func` 声明、参数/返回值类型、`return`、`if`/`switch`/`for` 的空骨架
+- 标准库用法：`fmt.Println`、`fmt.Printf` 格式占位符、`range` 遍历
+- 修复编译错误：缺 import、类型不匹配、语法拼写
+
+## 禁止
+
+- 不要补全练习函数的完整实现体
+- 不要参考同 day 的 `demo/main.go` 给出分支条件、循环逻辑、算法步骤
+- Tab/Inline 补全进入练习函数体时，最多留空或 `// TODO`，不要生成业务代码

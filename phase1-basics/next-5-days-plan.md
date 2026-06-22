@@ -6,13 +6,15 @@
 
 ## 每天固定节奏
 
-1. 先运行当天 `main.go`，看输出和现象。
+1. 先运行当天 `demo/main.go`，看输出和现象。
 2. 再读代码，把不懂的点写到当天 `notes.md`。
-3. 完成 `exercises.go` 的基础题，确保 `go run exercises.go` 能跑通。
+3. 完成 `exercise/main.go` 的基础题，确保 `go run phase1-basics/dayXX/exercise/main.go` 能跑通。
 4. 完成 1 到 2 个加餐题，强迫自己把知识组合起来用。
 5. 最后用 3 到 5 句话复盘：今天学了什么、卡在哪里、明天要补什么。
 
 ## Day 3：函数、作用域、多返回值
+
+状态：已完成（2026-06-22）
 
 主题：`func`、参数、返回值、多返回值、命名返回值、作用域
 
@@ -145,7 +147,7 @@
 - 知道首字母大写代表导出。
 
 基础练习：
-- 把 Day 7 项目拆成 `main.go`、`student.go`、`stats.go`、`parser.go`。
+- 把 Day 7 项目拆成 `main.go`、`student.go`、`stats.go`、`parser.go`，单独放在项目目录中。
 - 初始化 `go mod init`。
 - 保持 `go run .` 可以运行。
 

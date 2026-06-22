@@ -28,9 +28,9 @@ func main() {
 	// 限制：只能在函数内部使用（不能写在函数外面）
 	// 这是最常用的方式，80% 的变量都用这种
 
-	name := "Tom"   // Go 看到 "Tom" 是字符串，自动推断 name 是 string
-	age := 25       // Go 看到 25 是整数，自动推断 age 是 int
-	height := 175.5 // Go 看到 175.5 有小数，自动推断 height 是 float64
+	name := "Tom"     // Go 看到 "Tom" 是字符串，自动推断 name 是 string
+	age := 25         // Go 看到 25 是整数，自动推断 age 是 int
+	height := 175.5   // Go 看到 175.5 有小数，自动推断 height 是 float64
 	isStudent := true // Go 看到 true，自动推断 isStudent 是 bool
 
 	// 前端对比：
@@ -73,10 +73,10 @@ func main() {
 	var price float64 // 零值：0（浮点数的默认值是 0）
 
 	fmt.Println("\n--- 零值演示 ---")
-	fmt.Println("int 零值:", count)       // 0
-	fmt.Println("string 零值:", text)     // （空，什么都不显示）
-	fmt.Println("bool 零值:", flag)       // false
-	fmt.Println("float64 零值:", price)   // 0
+	fmt.Println("int 零值:", count)     // 0
+	fmt.Println("string 零值:", text)   // （空，什么都不显示）
+	fmt.Println("bool 零值:", flag)     // false
+	fmt.Println("float64 零值:", price) // 0
 
 	// 为什么 Go 要有零值？
 	// JS：let x; → x 是 undefined → x + 1 = NaN → 运行时才发现 bug
@@ -129,9 +129,9 @@ func main() {
 	// 前端的 number 既能表示整数也能表示小数
 	// Go 必须区分：整数是 int，小数是 float64
 
-	var f1 float32 = 3.14               // 32 位浮点，精度低（约 7 位有效数字）
-	var f2 float64 = 3.141592653589793  // 64 位浮点，精度高（约 15 位有效数字）
-	autoFloat := 3.14                   // := 推断小数默认是 float64
+	var f1 float32 = 3.14              // 32 位浮点，精度低（约 7 位有效数字）
+	var f2 float64 = 3.141592653589793 // 64 位浮点，精度高（约 15 位有效数字）
+	autoFloat := 3.14                  // := 推断小数默认是 float64
 
 	fmt.Println("float32:", f1)
 	fmt.Println("float64:", f2)
@@ -190,22 +190,23 @@ func main() {
 	var floatNum float64 = float64(intNum) // int → float64：用 float64() 包裹
 	var backToInt int = int(floatNum)      // float64 → int：用 int() 包裹，截断小数
 
-	fmt.Println("int 10 → float64:", floatNum)   // 10
-	fmt.Println("float64 → int:", backToInt)      // 10
+	fmt.Println("int 10 → float64:", floatNum) // 10
+	fmt.Println("float64 → int:", backToInt)   // 10
 
 	// 截断演示（不是四舍五入！）
 	var pi2 float64 = 3.99
-	var truncated int = int(pi2) // 直接砍掉小数，不会变成 4
+	var truncated int = int(pi2)            // 直接砍掉小数，不会变成 4
 	fmt.Println("3.99 截断为 int:", truncated) // 3
 
 	// ----- int 和 string 的转换 -----
 
 	// ❌ 常见错误：
-	wrong := string(65) // 你以为得到 "65"？不！得到 "A"（ASCII 码 65 = 字母 A）
-	fmt.Println("string(65) =", wrong, "← 不是 \"65\"，是 ASCII 字符！")
+	// string(rune(65)) 得到的是 "A"，不是 "65"；直接写 string(65) 会被 go vet 提醒。
+	wrong := string(rune(65))
+	fmt.Println("string(rune(65)) =", wrong, "← 不是 \"65\"，是 ASCII 字符！")
 
 	// ✅ 正确方式：用 fmt.Sprintf 或 strconv 包
-	correct := fmt.Sprintf("%d", 65) // 数字 → 字符串
+	correct := fmt.Sprintf("%d", 65)    // 数字 → 字符串
 	fmt.Println("Sprintf 转换:", correct) // "65"
 
 	// strconv 包的方式（后续会学到，这里先了解）：
@@ -284,8 +285,8 @@ func main() {
 	fmt.Println("\n--- 占位符大全 ---")
 	fmt.Printf("%%s  → 字符串:   %s\n", "hello")
 	fmt.Printf("%%d  → 整数:     %d\n", 42)
-	fmt.Printf("%%f  → 浮点数:   %f\n", 3.14)         // 默认 6 位小数
-	fmt.Printf("%%.2f → 保留2位:  %.2f\n", 3.14159)    // 3.14
+	fmt.Printf("%%f  → 浮点数:   %f\n", 3.14)       // 默认 6 位小数
+	fmt.Printf("%%.2f → 保留2位:  %.2f\n", 3.14159) // 3.14
 	fmt.Printf("%%t  → 布尔:     %t\n", true)
 	fmt.Printf("%%v  → 万能占位: %v %v %v\n", "hi", 42, true) // 什么类型都能打印
 	fmt.Printf("%%T  → 打印类型: %T %T %T\n", "hi", 42, 3.14) // string int float64
@@ -311,7 +312,7 @@ func main() {
 	fmt.Println("JS let x            →  Go var x int（零值 0，不是 undefined）")
 	fmt.Println("JS const x = 1      →  Go const x = 1")
 	fmt.Println("JS console.log()    →  Go fmt.Println()")
-	fmt.Println("JS `模板${变量}`    →  Go fmt.Sprintf(\"模板%s\", 变量)")
+	fmt.Printf("JS `模板${变量}`    →  Go fmt.Sprintf(\"模板%%s\", 变量)\n")
 	fmt.Println("JS 隐式类型转换     →  Go 不存在，必须显式转换")
 	fmt.Println("JS undefined        →  Go 不存在，每种类型都有零值")
 }

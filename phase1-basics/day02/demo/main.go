@@ -110,4 +110,4 @@ func main() {
 	for i, r := range "Go语言" {
 		fmt.Printf("位置 %d: %c\n", i, r)
 	}
-} 
+}
