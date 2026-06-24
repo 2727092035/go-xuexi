@@ -268,12 +268,13 @@ Student{
 
 - 写 `divide(a, b int) (int, error)`。
 - 写 `parseStudent(line string) (Student, error)`，输入格式：`"Tom,18,90|80|70"`。
-- 给 `Student` 增加 `Average()` 和 `Level()`，复用解析结果。
+- 写 `parseStudents(input string) ([]Student, error)`，输入格式：`"Tom,18,90|80|70;Jerry,20,100|95"`。
+- `parseStudents` 要复用 `parseStudent`，并在某一行失败时返回带行号的错误。
 
 验收标准：
 
 - 能运行 `go run phase1-basics/day06/demo/main.go`。
-- 能运行 `go run phase1-basics/day06/exercise/main.go`。
+- 补全 `exercise/main.go` 里的 TODO 后，能运行 `go run phase1-basics/day06/exercise/main.go` 并看到正确错误提示。
 - 能解释为什么 Go 函数常返回 `(value, error)`。
 - 能解释 `strings.Split`、`strings.TrimSpace`、`strconv.Atoi` 的作用。
 - 能写出 `if err != nil { return ... }` 的提前返回逻辑。

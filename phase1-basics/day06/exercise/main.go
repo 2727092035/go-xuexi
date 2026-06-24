@@ -18,87 +18,56 @@ type Student struct {
 }
 
 func main() {
-	fmt.Println("练习 1：parseScore")
-	// 要求：
-	// 1. 去掉输入字符串前后空白。
-	// 2. 把字符串转成 int。
-	// 3. 非数字返回 error。
-	// 4. 分数必须在 0 到 100。
 	for _, raw := range []string{"90", " 80 ", "abc", "-1", "101", ""} {
 		score, err := parseScore(raw)
-		fmt.Printf("parseScore(%q) => score=%d err=%v\n", raw, score, err)
+		fmt.Printf("parseScore %s: %d, %v\n", raw, score, err)
 	}
 
-	fmt.Println("\n练习 2：validateScore")
-	// 要求：
-	// 1. score < 0 返回错误。
-	// 2. score > 100 返回错误。
-	// 3. 0 到 100 返回 nil。
-	for _, score := range []int{-1, 0, 60, 100, 101} {
-		fmt.Printf("validateScore(%d) => %v\n", score, validateScore(score))
+	for i, score := range []int{90, 80, 70, 60, 50, 40, 30, 20, 10, 0, -1, 101} {
+		err := validateScore(score)
+		fmt.Printf("validateScore 下标 %d 分数 %d: %v\n", i, score, err)
 	}
 
-	fmt.Println("\n练习 3：parseScores")
-	// 要求：
-	// 1. 输入格式："90,80,70"。
-	// 2. 使用 strings.Split 拆分。
-	// 3. 每个分数复用 parseScore。
-	// 4. 任意一个分数非法，就返回 error。
-	for _, input := range []string{"90,80,70", "90, abc, 70", "100,0", ""} {
-		scores, err := parseScores(input)
-		fmt.Printf("parseScores(%q) => scores=%v err=%v\n", input, scores, err)
+	for _, raw := range []string{"90,80,70", "90, abc, 70", "100,0", ""} {
+		scores, err := parseScores(raw)
+		fmt.Printf("字符串转换为分数数组 %s: %v, %v\n", raw, scores, err)
 	}
 
-	fmt.Println("\n加餐 1：divide")
-	// 要求：
-	// 1. 正常除法返回结果和 nil。
-	// 2. 除数为 0 时返回 error。
+	fmt.Println("--------------------------------")
+
 	for _, item := range [][2]int{{10, 2}, {10, 0}, {9, 4}} {
 		result, err := divide(item[0], item[1])
-		fmt.Printf("divide(%d, %d) => result=%d err=%v\n", item[0], item[1], result, err)
+		fmt.Printf("divide %d, %d: %d, %v\n", item[0], item[1], result, err)
 	}
 
-	fmt.Println("\n加餐 2：parseStudent")
-	// 要求：
-	// 1. 输入格式："Tom,18,90|80|70"。
-	// 2. 解析出 Student。
-	// 3. 年龄必须是合法整数且不能小于 0。
-	// 4. 分数复用 parseScore。
-	for _, line := range []string{
+	for _, raw := range []string{
 		"Tom,18,90|80|70",
 		"Jerry,20,100|95",
 		"Lucy,x,90|80",
 		"Bob,19,90|abc",
-		",18,90",
+		"Diana,18,90",
 	} {
-		student, err := parseStudent(line)
-		fmt.Printf("parseStudent(%q) => student=%+v err=%v\n", line, student, err)
+		student, err := parseStudent(raw)
+		fmt.Printf("解析学生信息 %s: %v, %v\n", raw, student, err)
 	}
 
-	fmt.Println("\n加餐 3：统计学生平均分和等级")
-	// 要求：
-	// 1. 给 Student 实现 Average() float64。
-	// 2. 给 Student 实现 Level() string。
-	// 3. 复用 parseStudent 得到的数据。
-	student, err := parseStudent("Alice,18,90|80|70")
-	if err != nil {
-		fmt.Println("解析学生失败:", err)
-		return
-	}
-	fmt.Printf("%s average=%.1f level=%s\n", student.Name, student.Average(), student.Level())
+	fmt.Println("--------------------------------")
+	students, err := parseStudents("Tom,18,90|80|70;Jerry,20,100|95")
+	fmt.Printf("批量解析学生信息: %v, %v\n", students, err)
 
-	fmt.Println("\n练习完成！")
+	students, err = parseStudents("Tom,18,90|80|70;Bad,x,90")
+	fmt.Printf("批量解析学生信息: %v, %v\n", students, err)
 }
 
 func parseScore(raw string) (int, error) {
-	text := strings.TrimSpace(raw)
-	if text == "" {
-		return 0, errors.New("score is empty")
+	s := strings.TrimSpace(raw)
+	if s == "" {
+		return 0, errors.New("empty string")
 	}
 
-	score, err := strconv.Atoi(text)
+	score, err := strconv.Atoi(s)
 	if err != nil {
-		return 0, fmt.Errorf("invalid score %q", raw)
+		return 0, fmt.Errorf("invalid score: %w", err)
 	}
 
 	if err := validateScore(score); err != nil {
@@ -110,97 +79,84 @@ func parseScore(raw string) (int, error) {
 
 func validateScore(score int) error {
 	if score < 0 || score > 100 {
-		return fmt.Errorf("score %d out of range 0-100", score)
+		return errors.New("score out of range")
 	}
 	return nil
 }
 
 func parseScores(input string) ([]int, error) {
-	if strings.TrimSpace(input) == "" {
-		return nil, errors.New("scores input is empty")
+	text := strings.TrimSpace(input)
+	if text == "" {
+		return nil, errors.New("empty string")
 	}
 
-	parts := strings.Split(input, ",")
-	scores := make([]int, 0, len(parts))
+	parts := strings.Split(text, ",")
+	result := make([]int, 0, len(parts))
 	for _, part := range parts {
 		score, err := parseScore(part)
 		if err != nil {
 			return nil, err
 		}
-		scores = append(scores, score)
+		result = append(result, score)
 	}
-
-	return scores, nil
+	return result, nil
 }
 
-func divide(a, b int) (int, error) {
+func divide(a int, b int) (int, error) {
 	if b == 0 {
 		return 0, errors.New("division by zero")
 	}
 	return a / b, nil
 }
 
-func parseStudent(line string) (Student, error) {
-	parts := strings.Split(line, ",")
-	if len(parts) != 3 {
-		return Student{}, fmt.Errorf("invalid student line %q, want name,age,scores", line)
+// parseStudent 解析一行学生信息，格式为 "name,age,score1|score2|score3"。
+func parseStudent(input string) (Student, error) {
+	fields := strings.Split(input, ",")
+	if len(fields) != 3 {
+		return Student{}, errors.New("invalid input")
 	}
 
-	name := strings.TrimSpace(parts[0])
+	name := strings.TrimSpace(fields[0])
 	if name == "" {
-		return Student{}, errors.New("student name is empty")
+		return Student{}, errors.New("name is required")
 	}
 
-	ageText := strings.TrimSpace(parts[1])
-	age, err := strconv.Atoi(ageText)
+	age, err := strconv.Atoi(strings.TrimSpace(fields[1]))
 	if err != nil {
-		return Student{}, fmt.Errorf("invalid age %q", parts[1])
+		return Student{}, fmt.Errorf("invalid age: %w", err)
 	}
 	if age < 0 {
-		return Student{}, fmt.Errorf("age %d out of range", age)
+		return Student{}, errors.New("age out of range")
 	}
 
-	scoreParts := strings.Split(parts[2], "|")
-	scores := make([]int, 0, len(scoreParts))
+	scoreParts := strings.Split(fields[2], "|")
+	result := make([]int, 0, len(scoreParts))
 	for _, part := range scoreParts {
 		score, err := parseScore(part)
 		if err != nil {
 			return Student{}, err
 		}
-		scores = append(scores, score)
+		result = append(result, score)
 	}
 
-	return Student{
-		Name:   name,
-		Age:    age,
-		Scores: scores,
-	}, nil
+	return Student{Name: name, Age: age, Scores: result}, nil
 }
 
-func (s Student) Average() float64 {
-	if len(s.Scores) == 0 {
-		return 0
+// parseStudents 批量解析学生信息，多行之间用分号分隔。
+func parseStudents(input string) ([]Student, error) {
+	text := strings.TrimSpace(input)
+	if text == "" {
+		return nil, errors.New("empty string")
 	}
 
-	total := 0
-	for _, score := range s.Scores {
-		total += score
+	lines := strings.Split(text, ";")
+	students := make([]Student, 0, len(lines))
+	for index, line := range lines {
+		student, err := parseStudent(line)
+		if err != nil {
+			return nil, fmt.Errorf("student line %d invalid: %w", index+1, err)
+		}
+		students = append(students, student)
 	}
-	return float64(total) / float64(len(s.Scores))
-}
-
-func (s Student) Level() string {
-	average := s.Average()
-	switch {
-	case average >= 90:
-		return "A"
-	case average >= 80:
-		return "B"
-	case average >= 70:
-		return "C"
-	case average >= 60:
-		return "D"
-	default:
-		return "F"
-	}
+	return students, nil
 }
