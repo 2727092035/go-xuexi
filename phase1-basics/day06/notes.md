@@ -88,19 +88,48 @@ if err != nil {
 
 ## 5. strings.TrimSpace 和 strings.Split
 
-`strings.TrimSpace` 去掉字符串前后的空白：
+`strings.TrimSpace` 来自标准库 `strings` 包。它的作用是去掉字符串前后的空白字符，包括空格、换行、Tab。
+
+```go
+text := strings.TrimSpace(raw)
+```
+
+这行代码要拆开看：
+
+- `strings`：标准库包名，专门放字符串处理函数。
+- `TrimSpace`：函数名，意思是裁掉字符串两端的空白。
+- `raw`：传给函数的参数，也就是原始输入字符串。
+- `text`：函数返回的新字符串。
+
+它不会修改 `raw`，而是返回一个新的清理结果：
 
 ```go
 text := strings.TrimSpace(" 90 ")
 fmt.Println(text) // "90"
 ```
 
-`strings.Split` 按分隔符拆字符串：
+为什么这里必须用它？因为 `strconv.Atoi(" 90 ")` 会失败，`strconv.Atoi("90")` 才能成功。
+
+`strings.Split` 也来自 `strings` 包。它按指定分隔符拆字符串，返回一个字符串切片 `[]string`：
 
 ```go
 parts := strings.Split("90,80,70", ",")
 fmt.Println(parts) // []string{"90", "80", "70"}
 ```
+
+这行代码也要拆开看：
+
+- 第一个参数 `"90,80,70"`：要被拆分的原始字符串。
+- 第二个参数 `","`：分隔符，表示遇到逗号就切开。
+- 返回值 `parts`：字符串切片，也就是多个字符串组成的列表。
+
+如果输入是 `"90, 80,100"`，按逗号拆完会得到：
+
+```go
+[]string{"90", " 80", "100"}
+```
+
+注意 `" 80"` 前面还有空格，所以每一段还要继续用 `strings.TrimSpace` 清理。
 
 拆完以后通常配合 `for range` 遍历：
 
@@ -141,13 +170,27 @@ func divide(a, b int) (int, error) {
 
 流程：
 
-1. `strings.TrimSpace(raw)` 去掉空格。
+1. `strings.TrimSpace(raw)` 去掉原始输入 `raw` 前后的空白，返回清理后的 `text`。
 2. 空字符串直接返回错误。
-3. `strconv.Atoi(text)` 转数字。
+3. `strconv.Atoi(text)` 把清理后的字符串转成整数，并返回转换错误。
 4. `validateScore(score)` 校验范围。
 5. 全部成功才返回 `score, nil`。
 
 这就是 Go 里很常见的“每一步都检查错误，失败就提前返回”。
+
+关键代码：
+
+```go
+text := strings.TrimSpace(raw)
+```
+
+`raw` 是函数参数，代表外部传入的原始字符串。`TrimSpace` 返回的新值赋给 `text`，后面都使用 `text`，避免空格影响数字转换。
+
+```go
+score, err := strconv.Atoi(text)
+```
+
+`Atoi` 会尝试把字符串转成 `int`。它不是只返回一个数字，而是返回两个值：第一个是转换结果，第二个是错误。`err != nil` 时说明转换失败，必须提前返回。
 
 ### 第 3 段：parseScores
 
@@ -157,6 +200,8 @@ func divide(a, b int) (int, error) {
 parts := strings.Split(input, ",")
 scores := make([]int, 0, len(parts))
 ```
+
+`strings.Split(input, ",")` 的意思是：把 `input` 按逗号拆成多个字符串。逗号不会保留在结果里。
 
 这里 `make([]int, 0, len(parts))` 的意思是：
 

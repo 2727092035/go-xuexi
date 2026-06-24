@@ -34,8 +34,9 @@ func main() {
 	showParseScore("abc")
 
 	fmt.Println("\n===== 3. strings：清理和拆分字符串 =====")
-	// strings.TrimSpace 用来去掉前后空白。
-	// strings.Split 用分隔符把一个字符串拆成 []string。
+	// strings 是 Go 标准库里的字符串工具包。
+	// strings.TrimSpace(" 90 ") 会返回 "90"，作用是去掉字符串前后的空格、换行、Tab。
+	// strings.Split("90,80,100", ",") 会按逗号拆分，返回 []string{"90", "80", "100"}。
 	input := "90, 80,100"
 	scores, err := parseScores(input)
 	fmt.Println("输入:", input)
@@ -71,11 +72,18 @@ func showParseScore(raw string) {
 }
 
 func parseScore(raw string) (int, error) {
+	// raw 是调用方传进来的原始字符串，可能带空格，例如 " 88 "。
+	// strings.TrimSpace(raw) 不会修改 raw 本身，而是返回一个去掉前后空白的新字符串。
+	// 这里必须先清理空白，因为 strconv.Atoi(" 88 ") 会转换失败。
 	text := strings.TrimSpace(raw)
 	if text == "" {
 		return 0, errors.New("score is empty")
 	}
 
+	// strconv 是 Go 标准库里的字符串转换工具包。
+	// Atoi 是 ASCII to integer 的缩写，可以把 "90" 转成 int 类型的 90。
+	// 它返回两个值：score 是转换结果，err 是失败原因。
+	// 只要 err != nil，就说明输入不是合法整数，不能继续使用 score。
 	score, err := strconv.Atoi(text)
 	if err != nil {
 		return 0, fmt.Errorf("invalid score %q", raw)
@@ -96,7 +104,13 @@ func validateScore(score int) error {
 }
 
 func parseScores(input string) ([]int, error) {
+	// strings.Split(input, ",") 会用逗号切开字符串。
+	// 例如 input 是 "90, 80,100"，parts 就是 []string{"90", " 80", "100"}。
+	// 注意第二段仍然带前导空格，所以后面还要交给 parseScore 再 TrimSpace。
 	parts := strings.Split(input, ",")
+	// make([]int, 0, len(parts)) 创建一个 int 切片。
+	// 第 2 个参数 0 表示当前长度为 0，第 3 个参数 len(parts) 表示提前预留容量。
+	// 后面每解析成功一个分数，就用 append 追加进去。
 	scores := make([]int, 0, len(parts))
 
 	for _, part := range parts {
@@ -111,16 +125,20 @@ func parseScores(input string) ([]int, error) {
 }
 
 func parseStudent(line string) (Student, error) {
+	// 约定一行学生数据是 "姓名,年龄,分数列表"。
+	// 先用 strings.Split(line, ",") 按逗号拆成三段。
 	parts := strings.Split(line, ",")
 	if len(parts) != 3 {
 		return Student{}, fmt.Errorf("invalid student line %q, want name,age,scores", line)
 	}
 
+	// parts[0] 是姓名字段。用 TrimSpace 是为了允许 " Tom " 这种输入。
 	name := strings.TrimSpace(parts[0])
 	if name == "" {
 		return Student{}, errors.New("student name is empty")
 	}
 
+	// parts[1] 是年龄字段。先 TrimSpace，再用 strconv.Atoi 转成 int。
 	ageText := strings.TrimSpace(parts[1])
 	age, err := strconv.Atoi(ageText)
 	if err != nil {
@@ -130,6 +148,8 @@ func parseStudent(line string) (Student, error) {
 		return Student{}, fmt.Errorf("age %d out of range", age)
 	}
 
+	// parts[2] 是分数字段，格式是 "90|80|70"。
+	// 这里用竖线 | 再拆一次，得到每个单独的分数字符串。
 	scoreParts := strings.Split(parts[2], "|")
 	scores := make([]int, 0, len(scoreParts))
 	for _, part := range scoreParts {
