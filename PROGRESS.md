@@ -15,7 +15,7 @@
 - **当前天数：** Day 8（包、文件拆分、go mod）
 - **累计学习天数：** 7
 - **最近学习日期：** 2026-06-29
-- **今日状态：** Day 7 练习已完成并验证通过，下一步进入 Day 8
+- **今日状态：** Day 8-Day 10 学习材料已生成，下一步运行 Day 8 demo 并补全 Day 8 练习
 - **当前计划文件：** `LEARNING_PLAN_60_DAYS.md`（60 天总计划） + `phase1-basics/next-5-days-plan.md`（Day 3-Day 10 强化计划）
 - **60 天计划位置：** 已完成 Day 1-Day 7，当前处于 Day 8，剩余 Day 8-Day 60 共 53 天
 - **目录规范：** 每天拆分为 `demo/main.go`、`exercise/main.go`、`notes.md`，避免多个 `main` 冲突
@@ -92,6 +92,36 @@
 - **掌握程度：** 已完成
 - **疑问/待解决：** 班级平均分要按所有分数数量计算，不是按学生人数计算；统计最高/最低分时用 `hasScore` 处理第一条分数更稳
 - **下次计划：** Day 8 — 包、文件拆分、go mod
+
+### Day 8 — 包、文件拆分、go mod
+
+- **日期：** 2026-06-29
+- **学习内容：** `package`、多文件编译、`go run .`、导出标识符、跨目录 import、`go.mod` 模块路径
+- **产出文件：** `phase1-basics/day08/`（多文件 demo + 多文件 exercise 骨架 + notes.md 笔记）
+- **完成练习：** 待完成
+- **掌握程度：** 进行中
+- **疑问/待解决：** 需要重点区分 `go run main.go` 和 `go run .`，以及同 package 直接调用和跨 package import 的区别
+- **下次计划：** Day 9 — 测试入门
+
+### Day 9 — 测试入门
+
+- **日期：** 2026-06-29
+- **学习内容：** `testing`、`_test.go`、表格驱动测试、边界用例、benchmark 入门
+- **产出文件：** `phase1-basics/day09/`（demo/main.go + score.go + score_test.go + exercise 骨架 + notes.md）
+- **完成练习：** 待完成
+- **掌握程度：** 未开始
+- **疑问/待解决：** 需要删除练习测试里的 `t.Skip`，补全函数后运行 `go test`
+- **下次计划：** Day 10 — 综合复盘与并发入门
+
+### Day 10 — 综合复盘与并发入门
+
+- **日期：** 2026-06-29
+- **学习内容：** 基础阶段复盘、goroutine、channel、context、并发解析成绩数据
+- **产出文件：** `phase1-basics/day10/`（并发 demo + exercise 骨架 + notes.md + summary.md）
+- **完成练习：** 待完成
+- **掌握程度：** 未开始
+- **疑问/待解决：** 需要补全并发解析，理解结果顺序和 context 取消
+- **下次计划：** Day 11 — Web API 与数据库阶段开始
 
 ---
 
