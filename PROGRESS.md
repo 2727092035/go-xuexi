@@ -12,12 +12,12 @@
 ## 当前进度
 
 - **当前阶段：** 第一阶段 · 语法基础强化
-- **当前天数：** Day 6（错误处理、输入校验、strings/strconv）
-- **累计学习天数：** 5
-- **最近学习日期：** 2026-06-23（Day 4 有记录；Day 5 为计划调整前已完成，具体日期未记录）
-- **今日状态：** Day 5 练习已完成，下一步进入 Day 6
+- **当前天数：** Day 8（包、文件拆分、go mod）
+- **累计学习天数：** 7
+- **最近学习日期：** 2026-06-29
+- **今日状态：** Day 7 练习已完成并验证通过，下一步进入 Day 8
 - **当前计划文件：** `LEARNING_PLAN_60_DAYS.md`（60 天总计划） + `phase1-basics/next-5-days-plan.md`（Day 3-Day 10 强化计划）
-- **60 天计划位置：** 已完成 Day 1-Day 5，当前处于 Day 6，剩余 Day 6-Day 60 共 55 天
+- **60 天计划位置：** 已完成 Day 1-Day 7，当前处于 Day 8，剩余 Day 8-Day 60 共 53 天
 - **目录规范：** 每天拆分为 `demo/main.go`、`exercise/main.go`、`notes.md`，避免多个 `main` 冲突
 
 ---
@@ -72,6 +72,26 @@
 - **掌握程度：** 已完成
 - **疑问/待解决：** 后续在包拆分时继续熟悉字段和方法的大小写可见性
 - **下次计划：** Day 6 — 错误处理、输入校验、strings/strconv
+
+### Day 6 — 错误处理、输入校验、strings/strconv
+
+- **日期：** 2026-06-24
+- **学习内容：** `error`、`errors.New`、`fmt.Errorf`、`strings.TrimSpace`、`strings.Split`、`strconv.Atoi`、输入校验、错误返回
+- **产出文件：** `phase1-basics/day06/`（demo/main.go 示例 + exercise/main.go 练习 + notes.md 笔记）
+- **完成练习：** `parseScore`、`validateScore`、`parseScores`、`divide`、`parseStudent`、`parseStudents`
+- **掌握程度：** 已完成
+- **疑问/待解决：** 后续练习题要保持“题目 + 测试输入 + TODO 骨架”，不要直接把答案写进 exercise
+- **下次计划：** Day 7 — 小项目 1：成绩统计 CLI
+
+### Day 7 — 小项目 1：成绩统计 CLI
+
+- **日期：** 2026-06-29
+- **学习内容：** 组合函数、`[]Student`、`map[string]int`、多行输入解析、班级平均分/最高分/最低分、等级统计
+- **产出文件：** `phase1-basics/day07/`（demo/main.go 示例 + exercise/main.go 练习骨架 + notes.md 笔记）
+- **完成练习：** `parseStudent`、`parseStudents`、`parseScores`、`parseScore`、`validateScore`、`calculateStats`、`averageScore`、`grade`、`gradeCounts`、`printReport`
+- **掌握程度：** 已完成
+- **疑问/待解决：** 班级平均分要按所有分数数量计算，不是按学生人数计算；统计最高/最低分时用 `hasScore` 处理第一条分数更稳
+- **下次计划：** Day 8 — 包、文件拆分、go mod
 
 ---
 
